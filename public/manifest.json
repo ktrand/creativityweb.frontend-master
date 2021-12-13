@@ -1,0 +1,15 @@
+{
+    "name": "Creativity",
+    "short_name": "creativity",
+    "start_url": "index.html",
+    "display": "standalone",
+    "theme_color": "#2C303E",
+    "background_color": "#2C303E",
+    "icons": [
+      {
+        "src": "",
+        "sizes": "", 
+        "type": "" 
+      }
+    ]
+  }

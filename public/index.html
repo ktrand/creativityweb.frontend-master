@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <link rel="stylesheet" type="text/css" href="<%= BASE_URL %>loader.css">
+    <meta name=theme-color content=#2C303E>
+    <meta name=msapplication-TileColor content=#2C303E>
+    <title>Creativity</title>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry. Please enable it to continue.</strong>
+    </noscript>
+    <div id="loading-bg">
+      <div class="loading-logo">
+        <img src="<%= BASE_URL %>logo.png" alt="Logo">
+      </div>
+      <div class="loading">
+        <div class="effect-1 effects"></div>
+        <div class="effect-2 effects"></div>
+        <div class="effect-3 effects"></div>
+      </div>
+    </div>
+    <div id="app">
+
+    </div>
+    <!-- built files will be auto injected -->
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-messaging.js"></script>
+    <script>
+        // Initialize Firebase
+        // TODO: Replace with your project's customized code snippet
+        var config = {
+          apiKey: "AIzaSyA_Y-KsJjCzzJcB6qIOAXkRpXt8v6TJU3Y",
+          authDomain: "creativity-ee643.firebaseapp.com",
+          databaseURL: "https://creativity-ee643.firebaseio.com",
+          projectId: "creativity-ee643",
+          storageBucket: "creativity-ee643.appspot.com",
+          messagingSenderId: "603803984613",
+          appId: "1:603803984613:web:847f34a701b28a1dcaea0c",
+          measurementId: "G-K649YQH3X8"
+        };
+        firebase.initializeApp(config);
+
+        const messaging = firebase.messaging();
+        messaging
+            .requestPermission()
+            .then(function () {
+                // MsgElem.innerHTML = "Notification permission granted." 
+                console.log("Notification permission granted.");
+
+                // get the token in the form of promise
+                return messaging.getToken()
+            })
+            .then(function(token) {
+                console.log('token', token);
+                url = 'https://apicreativity.site/api/save-device-token'
+                const response = fetch(url, {
+                  method: 'POST',
+                  body: JSON.stringify({token: token}),
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer' + localStorage.getItem('creativity-user-token')
+                  }
+                });
+            })
+            .catch(function (err) {
+                // ErrElem.innerHTML =  ErrElem.innerHTML + "; " + err
+                console.log("Unable to get permission to notify.", err);
+            });
+
+        messaging.onMessage(function(payload) {
+          const noteTitle = payload.notification.title;
+          const noteOptions = {
+              body: payload.notification.body,
+              icon: payload.notification.icon,
+          };
+          new Notification(noteTitle, noteOptions);
+      });
+
+    </script>
+  </body>
+</html>
